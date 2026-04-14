@@ -18,8 +18,13 @@ class IntronTranscriptIDDictionary():
             #   <GENOMENAME>-<GENEID>@<TRANSCRIPTID>-intron<NUMBER>(???) OtherSpecies,OtherSpecies,OtherSpecies,OtherSpecies
             for line in tsv:
                 # first, isolate the main species intron id
-                head = line.split("\t")[0]
-                other_species = line.split("\t")[1].split(",")
+                parts = line.strip().split("\t")
+
+                if len(parts) < 2:
+                    continue
+
+                head = parts[0]
+                other_species = parts[1].split(",")
 
                 match = re.search(self.REG_TRANSCRIPT_ID, head)
                 if match:
@@ -57,9 +62,9 @@ class IntronTranscriptIDDictionary():
 
 def main():
     tid = IntronTranscriptIDDictionary()
-    tid.add_species('ortholog_dictionary/GRCh38_U12.tsv') # CHANGE THIS PATH TO TSV FILE PATH
+    tid.add_species('AgamP4_U12.tsv') # CHANGE THIS PATH TO TSV FILE PATH
     #tid.add_species('FinalProject/ortholog_dictionary/GRCm38_U2.tsv')
-    print(tid.get_ortholog_dict_of("HUM"))
+    print(tid.get_entire_dict())
 
 if __name__ == '__main__':
     main()
